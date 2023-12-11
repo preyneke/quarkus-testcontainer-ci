@@ -20,4 +20,11 @@ public class AgeRestrictionValidatorService {
         return underage;
     }
 
+    public boolean validateMaxAge(Customer customer){
+        if (customer.age > 80){
+            return true;
+        }
+        return false;
+    }
+
 }

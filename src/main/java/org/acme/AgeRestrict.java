@@ -31,12 +31,14 @@ public class AgeRestrict {
         //update or create new customer
         logger.info("Filtering a customer: " + customer);
         boolean underAge = ageRestrictionValidatorService.validateCustomerAge(customer);
-        if (underAge){
-            underageEmitter.send(customer);
-        }else {
+        //ignore validation if customer is above 80
+        if(!ageRestrictionValidatorService.validateMaxAge(customer)){
+            if (underAge){
+                underageEmitter.send(customer);
+            }
+        } else {
             customer.setStatus(PASSED);
         }
-
 
         //persist customer to Postgres DB
 
