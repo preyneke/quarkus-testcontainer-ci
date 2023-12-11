@@ -3,7 +3,9 @@ package org.acme;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.acme.enums.AgeStatus;
 import org.acme.services.AgeRestrictionValidatorService;
+import org.acme.services.CustomerService;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -15,14 +17,13 @@ public class AgeRestrict {
 
     private final Logger logger = Logger.getLogger(AgeRestrict.class);
 
-    private final static String FAILED = "failed";
-    private final static String PASSED = "passed";
+
 
     @Inject
     @Channel("underage")
     Emitter<Customer> underageEmitter;
     @Inject
-    AgeRestrictionValidatorService ageRestrictionValidatorService;
+    CustomerService customerService;
 
     @Incoming("customers")
     public void underage(Customer customer) {
@@ -30,12 +31,12 @@ public class AgeRestrict {
 
         //update or create new customer
         logger.info("Filtering a customer: " + customer);
-        boolean underAge = ageRestrictionValidatorService.validateCustomerAge(customer);
-        if (underAge){
+        customer = customerService.validateCustomerAgeStatus(customer);
+        if(customer.status.equals(AgeStatus.FAILED)){
             underageEmitter.send(customer);
-        }else {
-            customer.setStatus(PASSED);
         }
+
+        logger.info("customer age status: {}" +  customer.status);
 
 
         //persist customer to Postgres DB
@@ -44,7 +45,7 @@ public class AgeRestrict {
 
     @Incoming("underagein")
     public void underage_in(Customer customer) {
-        customer.setStatus(FAILED);
+       customerService.setCustomerStatusAsUnderAge(customer);
         logger.info("!!Got an underage customer: " + customer);
         //todo update customer in DB
 

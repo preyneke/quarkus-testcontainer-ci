@@ -4,20 +4,24 @@ import org.acme.Customer;
 
 import javax.enterprise.context.ApplicationScoped;
 
+
+import static org.acme.enums.AgeStatus.*;
+
 @ApplicationScoped
 public class AgeRestrictionValidatorService {
 
+
     //create a new method that takes in a Customer and verify if he is older than 21
 
-    public boolean validateCustomerAge(Customer customer){
+    public Customer validateCustomerAge(Customer customer){
         boolean underage;
 
         if (customer.age < 20){
-            underage = true;
+            customer.setStatus(FAILED);
         }else {
-           underage = false;
+           customer.setStatus(PASSED);
         }
-        return underage;
+        return customer;
     }
 
 }

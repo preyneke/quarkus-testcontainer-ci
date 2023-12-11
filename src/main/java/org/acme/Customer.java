@@ -1,6 +1,7 @@
 package org.acme;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.acme.enums.AgeStatus;
 
 @RegisterForReflection
 public class Customer {
@@ -9,7 +10,7 @@ public class Customer {
     public String name;
     public int age;
 
-    public String status;
+    public AgeStatus status;
 
 
     public Customer() {
@@ -21,7 +22,7 @@ public class Customer {
         this.age = age;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AgeStatus status) {
         this.status = status;
     }
 
