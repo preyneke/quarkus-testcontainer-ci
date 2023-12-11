@@ -51,12 +51,12 @@ public class TestAgeRestriction {
         }
 
         producer.send(new ProducerRecord<>("customers", 101, new Customer(101, "Abby", 17)));
-        producer.send(new ProducerRecord<>("customers", 102, new Customer(202, "Brooke", 42)));
+        producer.send(new ProducerRecord<>("customers", 102, new Customer(202, "Brooke", 33)));
         producer.send(new ProducerRecord<>("customers", 103, new Customer(303, "Crystal", 31)));
-        producer.send(new ProducerRecord<>("customers", 104, new Customer(404, "Diana", 51)));
-        producer.send(new ProducerRecord<>("customers", 101, new Customer(505, "Ellis", 16)));
-        producer.send(new ProducerRecord<>("customers", 102, new Customer(606, "Fiona", 22)));
-        producer.send(new ProducerRecord<>("customers", 103, new Customer(707, "Gabby", 33)));
+        producer.send(new ProducerRecord<>("customers", 104, new Customer(404, "Diana", 29)));
+        producer.send(new ProducerRecord<>("customers", 101, new Customer(505, "Ellis", 14)));
+        producer.send(new ProducerRecord<>("customers", 102, new Customer(606, "Fiona", 33)));
+        producer.send(new ProducerRecord<>("customers", 103, new Customer(707, "Gabby", 32)));
         producer.send(new ProducerRecord<>("customers", 104, new Customer(808, "Hannah", 29)));
 
         Consumer<Integer, Customer> underage_consumer = createConsumer("underage");
