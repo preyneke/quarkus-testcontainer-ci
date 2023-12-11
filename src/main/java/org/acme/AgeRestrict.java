@@ -3,6 +3,7 @@ package org.acme;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.acme.services.AgeRestrictionValidatorService;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -20,6 +21,8 @@ public class AgeRestrict {
     @Inject
     @Channel("underage")
     Emitter<Customer> underageEmitter;
+    @Inject
+    AgeRestrictionValidatorService ageRestrictionValidatorService;
 
     @Incoming("customers")
     public void underage(Customer customer) {
@@ -27,11 +30,14 @@ public class AgeRestrict {
 
         //update or create new customer
         logger.info("Filtering a customer: " + customer);
-        if (customer.age < 20){
+        boolean underAge = ageRestrictionValidatorService.validateCustomerAge(customer);
+        if (underAge){
             underageEmitter.send(customer);
         }else {
             customer.setStatus(PASSED);
         }
+
+
         //persist customer to Postgres DB
 
     }
